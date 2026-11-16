@@ -1,0 +1,4 @@
+tomate/dados/brutos/conab/
+tomate/dados/brutos/fao/
+__pycache__/
+*.pdf.txt

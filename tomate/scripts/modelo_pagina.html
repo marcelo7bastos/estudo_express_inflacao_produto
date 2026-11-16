@@ -1,0 +1,585 @@
+<title>Tomate: preços e perspectivas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: relatório técnico em coluna única de leitura, com barra de filtros fixa e gráficos na largura da coluna. */
+:root{
+  --bg:#f7f8f6; --surface:#fcfcfb; --ink:#10140f; --ink2:#4b514a; --muted:#7d837b; --line:#dfe2dc; --axis:#c2c7bf;
+  --accent:#1f5c3a; --accent-soft:#e6efe8; --warn-bg:#fff4dc; --warn-ink:#6b4a00;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#6250d6; --s8:#e34948;
+  --band:#e3494822; --band2:#e3494833; --ref:#52514e;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif; --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f110f; --surface:#1a1b19; --ink:#eef0ec; --ink2:#c0c5bd; --muted:#8b9189; --line:#2c2f2b; --axis:#3a3e39;
+  --accent:#7fc79a; --accent-soft:#1c2a21; --warn-bg:#33290f; --warn-ink:#f2d48a;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#0ca30c; --s7:#9085e9; --s8:#e66767;
+  --band:#e6676726; --band2:#e667673d; --ref:#c3c2b7; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f110f; --surface:#1a1b19; --ink:#eef0ec; --ink2:#c0c5bd; --muted:#8b9189; --line:#2c2f2b; --axis:#3a3e39;
+  --accent:#7fc79a; --accent-soft:#1c2a21; --warn-bg:#33290f; --warn-ink:#f2d48a;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#0ca30c; --s7:#9085e9; --s8:#e66767;
+  --band:#e6676726; --band2:#e667673d; --ref:#c3c2b7; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:860px;margin:0 auto;padding-block:32px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(30px,5.2vw,46px);line-height:1.08;margin:10px 0 12px;text-wrap:balance;letter-spacing:-.01em}
+.lede{font-size:18px;color:var(--ink2);max-width:66ch;margin:0}
+.meta{font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-top:14px}
+h2{font-family:var(--f-display);font-weight:700;font-size:26px;line-height:1.2;margin:56px 0 6px;text-wrap:balance;padding-top:18px;border-top:2px solid var(--ink)}
+h3{font-family:var(--f-display);font-weight:600;font-size:18px;line-height:1.3;margin:0 0 4px;text-wrap:balance}
+p{max-width:68ch;margin:12px 0}
+ul{max-width:68ch;padding-left:20px;margin:12px 0}
+li{margin:6px 0}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:28px 0 8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kpi{padding:14px 14px 14px 0;min-width:0}
+.kpi+.kpi{padding-left:14px;border-left:1px solid var(--line)}
+.kpi b{display:block;font-family:var(--f-display);font-weight:700;font-size:30px;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi span{display:block;font-size:13px;color:var(--ink2);line-height:1.35;margin-top:4px}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}.kpi{padding:12px 10px 12px 0}.kpi:nth-child(3){padding-left:0;border-left:0}.kpi:nth-child(n+3){border-top:1px solid var(--line)}}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:22px 0 0;font-size:14px}
+nav.toc a{text-decoration:none;border-bottom:1px solid var(--line)}
+.filters{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin:28px 0 0;padding:10px 0;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:13px}
+.filters label{color:var(--ink2);display:flex;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--axis);border-radius:6px;overflow:hidden}
+.seg button{font:inherit;font-size:13px;background:transparent;color:var(--ink2);border:0;padding:5px 10px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--axis)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+figure{margin:26px 0 30px;padding:18px 18px 14px;background:var(--surface);border:1px solid var(--line);border-radius:6px;min-width:0}
+figure .sub{font-size:13.5px;color:var(--ink2);margin:0 0 10px;max-width:none}
+figcaption{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.45}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;color:var(--ink2);margin:6px 0 4px}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.legend i.sq{height:10px;width:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px}
+.chips button{font:inherit;font-size:13px;background:transparent;color:var(--ink2);border:1px solid var(--axis);border-radius:999px;padding:3px 10px 3px 8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.chips button i{width:10px;height:10px;border-radius:50%;display:inline-block;opacity:.25}
+.chips button[aria-pressed="true"]{color:var(--ink);border-color:var(--ink2)}
+.chips button[aria-pressed="true"] i{opacity:1}
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--f-body);font-size:11.5px;fill:var(--muted)}
+.chart text.lab{fill:var(--ink2);font-size:12px}
+.chart text.val{fill:var(--ink);font-size:12px;font-variant-numeric:tabular-nums}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;line-height:1.45;padding:7px 9px;border-radius:5px;white-space:nowrap;z-index:3;font-variant-numeric:tabular-nums}
+.tip b{font-weight:600}
+.tip i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+details{margin-top:8px;font-size:13px}
+summary{cursor:pointer;color:var(--ink2)}
+.tw{overflow-x:auto;margin:14px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 10px 6px 0;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-weight:600;color:var(--ink2);font-size:12.5px;vertical-align:bottom;white-space:normal}
+td{font-family:var(--f-mono);font-size:13px}
+td:first-child{font-family:var(--f-body)}
+details .tw{max-height:300px;overflow:auto}
+.note{background:var(--warn-bg);color:var(--warn-ink);padding:10px 14px;border-radius:6px;font-size:14px;max-width:68ch;margin:16px 0}
+.box{background:var(--accent-soft);padding:14px 18px;border-radius:6px;margin:18px 0;max-width:72ch}
+.box h3{margin-bottom:6px}
+.box ul{margin:6px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid2 figure{margin:0}
+@media (max-width:720px){.grid2{grid-template-columns:1fr}}
+.src li{font-size:14px;overflow-wrap:anywhere}
+.scen td:first-child{font-weight:600}
+.scen td{white-space:normal;font-family:var(--f-body);vertical-align:top}
+.scen td.n{font-family:var(--f-mono);white-space:nowrap}
+.scen td:last-child,.scen th:last-child{text-align:left;min-width:240px;padding-left:12px}
+footer{margin-top:56px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Relatório técnico · abastecimento e inflação de alimentos</div>
+  <h1>Tomate: preços de 2015 a 2026 e perspectivas para 2027–2028</h1>
+  <p class="lede">Como o preço do tomate evoluiu no varejo e no atacado, por que oscila tanto, quem produz e quem consome, o que o clima explica e o que esperar dos próximos dois anos.</p>
+  <div class="meta">Dados até outubro de 2026 (IPCA) e setembro de 2026 (atacado) · elaborado em 16 nov. 2026<br>Autor: {{AUTOR}} · <a href="#ia">elaborado com apoio de inteligência artificial</a> · <a href="https://github.com/marcelo7bastos/estudo_express_inflacao_produto/tree/main/tomate">dados e código</a></div>
+</header>
+
+<div class="kpis">
+  <div class="kpi"><b>+89,8%</b><span>alta do tomate no IPCA de janeiro a outubro de 2026</span></div>
+  <div class="kpi"><b>0,17 p.p.</b><span>do IPCA de 4,10% no ano veio só do tomate</span></div>
+  <div class="kpi"><b>14,8 p.p.</b><span>desvio-padrão da variação mensal, contra 0,4 do IPCA geral</span></div>
+  <div class="kpi"><b>−32%</b><span>queda real projetada da média de 2027 frente a outubro de 2026 (cenário base)</span></div>
+</div>
+
+<nav class="toc" aria-label="Seções">
+  <a href="#resumo">Resumo</a><a href="#ipca">Inflação</a><a href="#pracas">Praças</a><a href="#repasse">Atacado e varejo</a><a href="#saz">Sazonalidade</a><a href="#producao">Produção</a><a href="#af">Agricultura familiar</a><a href="#consumo">Consumo</a><a href="#clima">Clima</a><a href="#custos">Custos</a><a href="#industria">Indústria</a><a href="#mundo">Mundo</a><a href="#persp">Perspectivas</a><a href="#conc">Conclusões</a><a href="#metodo">Método e fontes</a>
+</nav>
+
+<h2 id="resumo">Resumo</h2>
+<ul>
+  <li><b>2026 é um ano de choque.</b> O tomate subiu 89,8% no IPCA até outubro e 63,3% em doze meses. Em termos reais (descontada a inflação geral), o preço de outubro está 46% acima da média de 2015–2026.</li>
+  <li><b>O choque é de oferta e de clima.</b> A estimativa de safra do IBGE para 2026 caiu 8% entre dezembro de 2025 e outubro de 2026, com área colhida 7,8% menor. O volume de tomate em seis grandes CEASAs em setembro ficou 14% abaixo de setembro de 2025. O índice do El Niño (ONI) chegou a 2,46 no trimestre agosto–outubro, nível de evento forte.</li>
+  <li><b>No longo prazo o tomate encareceu pouco.</b> De dezembro de 2014 a outubro de 2026 o tomate acumulou 252% no IPCA, contra 90% do índice geral, mas quase toda a diferença está no pico atual. A média real de 2025 ficou só 6% acima da de 2015.</li>
+  <li><b>O que distingue o tomate é a volatilidade.</b> Em 142 meses, o preço subiu 20% ou mais em 18 deles e caiu 20% ou mais em 6. Altas fortes costumam ser devolvidas em poucos meses.</li>
+  <li><b>O atacado passa cerca de 70% da variação ao varejo em dois meses</b>, sem diferença mensurável entre altas e quedas. As praças do Sudeste andam juntas; Recife e Fortaleza seguem um ciclo próprio.</li>
+  <li><b>A produção se concentra.</b> Goiás, São Paulo e Minas Gerais colheram 66% do tomate em 2025. A agricultura familiar responde por 82% dos estabelecimentos e 45% do volume do tomate de mesa, e por menos de 10% do tomate industrial (Censo 2017).</li>
+  <li><b>O consumo domiciliar de tomate fresco vem caindo</b> (5,0 kg por pessoa em 2002–03, 4,2 kg em 2017–18) e depende da renda: as famílias mais ricas compram 2,7 vezes mais que as mais pobres.</li>
+  <li><b>Perspectiva:</b> o modelo indica volta do preço real para perto da média histórica em 2027, com intervalo largo (de 25% abaixo a 30% acima). O risco de alta está em clima adverso prolongado e em custos (petróleo e fertilizantes voltaram a subir em 2026).</li>
+</ul>
+
+<div class="filters" role="group" aria-label="Filtros dos gráficos de séries">
+  <label>Período
+    <span class="seg" id="segPeriodo">
+      <button type="button" data-v="2015" aria-pressed="true">2015–2026</button><button type="button" data-v="2020" aria-pressed="false">2020–2026</button><button type="button" data-v="24m" aria-pressed="false">24 meses</button>
+    </span>
+  </label>
+  <label>Preço no atacado
+    <span class="seg" id="segValor">
+      <button type="button" data-v="real" aria-pressed="true">Real (R$ de out/2026)</button><button type="button" data-v="nom" aria-pressed="false">Nominal</button>
+    </span>
+  </label>
+</div>
+
+<h2 id="ipca">1. O tomate na inflação</h2>
+<p>O IPCA mede o preço ao consumidor. O tomate pesa pouco no índice (0,30% em outubro de 2026), mas varia tanto que aparece com frequência entre os itens que mais puxam ou seguram a inflação do mês.</p>
+
+<figure>
+  <h3>A variação em doze meses do tomate já foi de −47% a +115%</h3>
+  <p class="sub">Variação acumulada em 12 meses, em %</p>
+  <div class="legend"><span><i style="background:var(--s8)"></i>Tomate</span><span><i style="background:var(--s1)"></i>IPCA geral</span></div>
+  <div class="chart" id="c12m"></div>
+  <figcaption>Fonte: IBGE, IPCA (tabelas 1419 e 7060 do SIDRA). Elaboração própria.</figcaption>
+</figure>
+
+<figure>
+  <h3>Descontada a inflação, o preço volta sempre para perto da média</h3>
+  <p class="sub">Índice de preço real do tomate no IPCA (tomate dividido pelo IPCA geral), média de 2015 = 100</p>
+  <div class="chart" id="cReal"></div>
+  <figcaption>A linha tracejada é a média de 2015 a 2026 (101,1). Mínimo em setembro de 2018 (60,6); máximo em abril de 2022 (166,0). Fonte: IBGE. Elaboração própria.</figcaption>
+</figure>
+
+<h3>Ano a ano</h3>
+<p>A contribuição mostra quantos pontos percentuais do IPCA do ano vieram do tomate (peso do mês multiplicado pela variação do mês, somados).</p>
+<div class="tw"><table id="tAnual"></table></div>
+<p>Três anos concentram as altas: 2015 (+47,5%), 2018 (+71,7%) e 2020 (+52,8%). Os anos seguintes devolveram boa parte: 2016 (−27,8%), 2019 (−30,4%) e 2024 (−25,9%). O ano de 2026 já supera todos os anteriores da série.</p>
+
+<h2 id="pracas">2. Preço por praça</h2>
+<p>O atacado é medido pelos preços médios mensais que a Conab publica no Boletim Hortigranjeiro (Prohort) para as principais centrais de abastecimento. A série abaixo foi montada a partir de 136 boletins e planilhas, de abril de 2015 a setembro de 2026.</p>
+<div class="note"><b>Lacuna:</b> a Conab não publica série de tomate para a CEASA da Bahia nesses boletins. Salvador aparece neste relatório apenas no varejo (IPCA). O portal Prohort com a base completa não respondeu durante a coleta.</div>
+
+<figure>
+  <h3>No atacado, as praças sobem e descem juntas, em níveis diferentes</h3>
+  <p class="sub" id="subW">Preço médio mensal do tomate no atacado, R$ por kg, em valores de outubro de 2026</p>
+  <div class="chips" id="chipsW" role="group" aria-label="Praças exibidas"></div>
+  <div class="chart" id="cW"></div>
+  <figcaption>“Média 8 praças” é a média simples de São Paulo, Belo Horizonte, Rio de Janeiro, Vitória, Curitiba, Goiânia, Recife e Fortaleza (não é a média ponderada da Conab). Goiânia não tem dado de julho a setembro de 2026. Fonte: Conab, Boletim Hortigranjeiro. Deflator: IPCA.</figcaption>
+</figure>
+
+<div class="tw"><table id="tW"></table></div>
+<p>Curitiba, São Paulo e Goiânia têm os preços médios mais altos; Recife e Belo Horizonte, os mais baixos. Recife e Vitória são as praças mais instáveis. Em setembro de 2026, Curitiba registrou o maior preço real de toda a sua série (R$ 8,86/kg).</p>
+
+<h3>Integração entre praças</h3>
+<p>A correlação entre as variações mensais mostra dois blocos. Sudeste, Curitiba e Goiânia se movem juntos (correlações de 0,54 a 0,80). Recife acompanha pouco o Sudeste (0,30 a 0,39) e mais Fortaleza (0,56), porque o Nordeste é abastecido por polos próprios, como o agreste pernambucano, a Chapada Diamantina e a Serra da Ibiapaba.</p>
+<div class="tw"><table id="tCorr"></table></div>
+
+<h3>Varejo por região metropolitana</h3>
+<p>O IBGE calcula o IPCA do tomate para 16 áreas. A alta de 2026 é generalizada, mas desigual: passa de 130% no Rio de Janeiro, em Belo Horizonte e em Curitiba e fica em 26% em São Luís.</p>
+<figure>
+  <h3>Preço real do tomate no varejo, por área</h3>
+  <p class="sub">Índice real (tomate ÷ IPCA geral da própria área), média de 2015 = 100 · <label>Área: <select id="selReg"></select></label></p>
+  <div class="legend"><span><i id="legReg" style="background:var(--s7)"></i><span id="legRegName"></span></span><span><i style="background:var(--ref)"></i>Brasil</span></div>
+  <div class="chart" id="cReg"></div>
+  <figcaption>Aracaju, Rio Branco e São Luís entraram no IPCA em maio de 2018 e não têm índice com base em 2015. Fonte: IBGE.</figcaption>
+</figure>
+<div class="tw"><table id="tReg"></table></div>
+<div class="note">Comparações de <b>nível</b> acumulado em prazos longos entre praças são frágeis. Índices encadeados de itens muito voláteis acumulam desvios, e a cesta de variedades de cada fonte muda ao longo do tempo. As comparações de variação em 12 meses, no ano e de volatilidade são mais seguras.</div>
+
+<h2 id="repasse">3. Do atacado ao varejo</h2>
+<p>Para cada cidade com CEASA e IPCA, estimou-se quanto da variação mensal do preço no atacado aparece no preço ao consumidor no mesmo mês e nos dois meses seguintes.</p>
+<figure>
+  <h3>Cerca de metade da variação do atacado chega ao varejo no mesmo mês</h3>
+  <p class="sub">Repasse de uma variação de 1% no atacado para o varejo, em %</p>
+  <div class="legend"><span><i class="sq" style="background:var(--s1)"></i>No mesmo mês</span><span><i class="sq" style="background:var(--s2)"></i>No mês seguinte</span></div>
+  <div class="chart" id="cPT"></div>
+  <figcaption>Regressão da variação mensal (em log) do IPCA do tomate de cada área sobre a variação do preço na CEASA da mesma cidade, com duas defasagens. Período: 2015 a 2026. Elaboração própria com dados do IBGE e da Conab.</figcaption>
+</figure>
+<div class="tw"><table id="tPT"></table></div>
+<p>No conjunto das nove cidades, 1% de alta no atacado vira 0,48% no varejo no mesmo mês e mais 0,21% no mês seguinte. O repasse total fica em torno de 0,70, compatível com a literatura: Barros e Fiallos (1982) já estimavam elasticidade de transmissão pouco acima de 0,5 para São Paulo. O varejo amortece as oscilações, nos dois sentidos.</p>
+<p>O teste de assimetria não encontrou diferença entre altas e quedas (0,48 nas altas, 0,49 nas quedas; p = 0,76). Com dados mensais, portanto, não há evidência de que o varejo repasse altas mais depressa do que quedas. Estudos com dados semanais para São Paulo apontaram assimetria; a frequência mensal pode esconder esse efeito.</p>
+
+<h2 id="saz">4. Sazonalidade e volatilidade</h2>
+<figure>
+  <h3>O preço costuma ser mais alto de março a maio e mais baixo de agosto a setembro</h3>
+  <p class="sub">Índice sazonal: média do preço real de cada mês em relação à média móvel de 12 meses (100 = sem efeito sazonal)</p>
+  <div class="legend"><span><i class="sq" style="background:var(--s2)"></i>Atacado (média 8 praças)</span><span><i class="sq" style="background:var(--s8)"></i>Varejo (IPCA)</span></div>
+  <div class="chart" id="cSaz"></div>
+  <figcaption>Período: 2015 a 2026. Fonte: Conab e IBGE. Elaboração própria.</figcaption>
+</figure>
+<p>No atacado, abril fica em média 25% acima da tendência e agosto 21% abaixo. A safra de verão termina no outono e a de inverno, colhida em clima seco e ameno, concentra oferta entre julho e setembro. O varejo segue o mesmo desenho, com amplitude menor.</p>
+<p>O padrão sazonal é uma média. Em 2026 ele se inverteu: os preços caíram 29% em julho e subiram 38% em setembro e 20% em outubro, meses que costumam ser de baixa.</p>
+<p>A volatilidade vem de três características da cultura: ciclo curto (cerca de 100 a 120 dias), produto que não pode ser estocado e demanda pouco sensível ao preço. Qualquer quebra de oferta vira alta forte; preço alto atrai plantio e, meses depois, a oferta maior derruba o preço.</p>
+
+<h2 id="producao">5. Quem produz</h2>
+<p>O Brasil colheu 4,66 milhões de toneladas de tomate em 2025, em 63,5 mil hectares, com valor de produção de R$ 10,9 bilhões (IBGE, Produção Agrícola Municipal). É o maior volume do período; em 2015 foram 4,19 milhões. A produtividade passou de 65,9 para 73,4 toneladas por hectare no período.</p>
+<figure>
+  <h3>Goiás, São Paulo e Minas Gerais colhem dois terços do tomate</h3>
+  <p class="sub">Produção em 2025, em mil toneladas, e participação no total nacional</p>
+  <div class="chart" id="cUF"></div>
+  <figcaption>O total inclui tomate de mesa e industrial. Em Goiás predomina o tomate para indústria. Fonte: IBGE, PAM 2025 (tabela 1612).</figcaption>
+</figure>
+<div class="grid2">
+<figure>
+  <h3>Produção e área</h3>
+  <p class="sub">Produção, em milhões de toneladas</p>
+  <div class="chart" id="cProd"></div>
+  <figcaption>2026: estimativa do LSPA de outubro. Fonte: IBGE.</figcaption>
+</figure>
+<figure>
+  <h3>Produtividade</h3>
+  <p class="sub">Toneladas por hectare</p>
+  <div class="chart" id="cRend"></div>
+  <figcaption>2026: estimativa do LSPA de outubro. Fonte: IBGE.</figcaption>
+</figure>
+</div>
+<p><b>Safra de 2026.</b> O Levantamento Sistemático da Produção Agrícola de outubro estima 4,38 milhões de toneladas, 8,0% abaixo da estimativa de dezembro de 2025 (4,76 milhões). A área colhida recuou de 63,6 para 58,7 mil hectares. Goiás deve colher 1,35 milhão de toneladas, ante 1,65 milhão registrados na PAM de 2025. O Cepea estima área de tomate de mesa 5,4% menor em 2026.</p>
+<p><b>Municípios.</b> Os maiores produtores em 2025 foram Silvânia, Cristalina e Morrinhos (GO), Itapeva (SP), Vianópolis (GO) e Apiaí (SP). Fora do eixo Goiás–São Paulo, destacam-se Bezerros (PE), Guaraciaba do Norte (CE) e Ibicoara (BA).</p>
+<div class="tw"><table id="tMun"></table></div>
+<h3>De onde vem o tomate das CEASAs</h3>
+<p>Em setembro de 2026, São Paulo e Minas Gerais forneceram 54% do tomate comercializado nas centrais acompanhadas pela Conab. Cada região é abastecida principalmente por lavouras do próprio estado ou de estados vizinhos, o que explica por que os preços respondem ao clima local.</p>
+<div class="tw"><table id="tOrig"></table></div>
+<p><b>Estados consumidores.</b> São Paulo, Rio de Janeiro, Minas Gerais e os estados do Nordeste concentram a população e, portanto, o consumo. O Rio de Janeiro produz 2,5% do tomate e depende de Minas Gerais, São Paulo e Espírito Santo. O Norte quase não produz e paga os preços mais altos: em Rio Branco o atacado ficou em R$ 10,93/kg em setembro de 2026, quase o dobro de São Paulo.</p>
+
+<h2 id="af">6. Agricultura familiar</h2>
+<p>O dado mais recente sobre o perfil dos produtores é o Censo Agropecuário de 2017. O censo separa o tomate estaqueado (de mesa, classificado como horticultura) do tomate rasteiro (industrial, classificado como lavoura temporária).</p>
+<div class="tw"><table id="tAF"></table></div>
+<p>No tomate de mesa, a agricultura familiar é a base da produção: quatro em cada cinco estabelecimentos e 45% do volume. A participação no volume passa de 60% no Paraná, em Santa Catarina, no Rio de Janeiro e no Ceará, e fica perto de 30% em São Paulo e no Espírito Santo, onde há mais produção empresarial de maior escala.</p>
+<p>No tomate industrial o quadro é outro. A produção é mecanizada, contratada pelas processadoras e concentrada em Goiás, onde a agricultura familiar responde por 1,4% do volume.</p>
+<div class="tw"><table id="tAFuf"></table></div>
+<div class="note">O Censo de 2017 registra 2,24 milhões de toneladas de tomate, cerca de metade do que a PAM aponta para o mesmo ano. As duas pesquisas têm método e período de referência diferentes. As participações da agricultura familiar valem como ordem de grandeza e podem ter mudado desde 2017.</div>
+<p>Para o produtor familiar, a volatilidade pesa mais. O custo do tomate envarado é alto por hectare (a estrutura de condução sozinha custava R$ 16,2 mil por hectare em Mogi Guaçu na safra de inverno de 2024, segundo o Cepea), e uma única safra vendida abaixo do custo pode comprometer o capital do ciclo seguinte.</p>
+
+<h2 id="consumo">7. Consumo</h2>
+<p>A Pesquisa de Orçamentos Familiares (POF) mede o que as famílias compram para consumo em casa. Não inclui refeições fora do domicílio.</p>
+<div class="grid2">
+<figure>
+  <h3>Menos tomate fresco e mais molho pronto</h3>
+  <p class="sub">Aquisição domiciliar per capita, kg por ano</p>
+  <div class="legend"><span><i class="sq" style="background:var(--s8)"></i>Tomate</span><span><i class="sq" style="background:var(--s4)"></i>Molho</span><span><i class="sq" style="background:var(--s7)"></i>Massa</span></div>
+  <div class="chart" id="cPof"></div>
+  <figcaption>Fonte: IBGE, POF 2002–03, 2008–09 e 2017–18 (tabela 2393).</figcaption>
+</figure>
+<figure>
+  <h3>O consumo cresce com a renda</h3>
+  <p class="sub">Tomate fresco, kg por pessoa por ano, por faixa de renda familiar mensal (2017–18)</p>
+  <div class="chart" id="cRenda"></div>
+  <figcaption>Faixas em reais de 2018. Fonte: IBGE, POF 2017–18 (tabela 8157).</figcaption>
+</figure>
+</div>
+<ul>
+  <li><b>Tendência.</b> A compra de tomate fresco caiu 16% entre 2002–03 e 2017–18. A de molho de tomate mais que dobrou (0,41 para 0,95 kg) e a de massa de tomate caiu 60%. Parte do consumo migrou do produto fresco para o processado.</li>
+  <li><b>Regiões.</b> Em 2017–18 o Centro-Oeste comprava 5,6 kg por pessoa, o Sul 4,7, o Sudeste e o Nordeste 4,2 e o Norte 2,1.</li>
+  <li><b>Renda.</b> Famílias com renda até R$ 1.908 compravam 3,0 kg por pessoa; as com renda acima de R$ 14.310, 7,9 kg. Uma alta de preço como a de 2026 tira o tomate primeiro da mesa de quem já consome menos.</li>
+  <li><b>Disponibilidade total.</b> A produção de 2025 dividida pela população (cerca de 213 milhões) dá em torno de 22 kg por habitante. A diferença para os 4,2 kg da POF está no tomate industrial (perto de 40% da produção), no consumo fora de casa, nas perdas e no uso em alimentos processados.</li>
+</ul>
+<h3>Resposta do preço à quantidade</h3>
+<p>Nas seis CEASAs com série completa de volume (maio de 2022 a setembro de 2026), uma queda de 1% na quantidade comercializada no mês vem acompanhada de alta de 1,2% no preço real. Isso indica demanda pouco elástica no atacado: o comprador não reduz muito a compra quando o preço sobe, e por isso pequenas variações de oferta produzem grandes variações de preço.</p>
+<figure>
+  <h3>O volume de tomate nas CEASAs encolheu ao longo de 2026</h3>
+  <p class="sub">Volume mensal de tomate em seis CEASAs (São Paulo, Belo Horizonte, Rio de Janeiro, Vitória, Recife e Fortaleza), em mil toneladas</p>
+  <div class="chart" id="cQ"></div>
+  <figcaption>De janeiro a setembro de 2026 o volume ficou 4,4% abaixo do mesmo período de 2025; em setembro, 14,4% abaixo. Fonte: Conab, Boletim Hortigranjeiro.</figcaption>
+</figure>
+<p>A literatura aponta na mesma direção. Estudos de demanda com dados da POF encontram baixa resposta do consumo de frutas e hortaliças ao preço e resposta positiva à renda: segundo Claro e Monteiro, 1% a mais de renda familiar eleva em 0,27% a participação de frutas e hortaliças nas calorias adquiridas. Não foi encontrada estimativa recente de elasticidade-preço específica para o tomate com base na POF.</p>
+
+<h2 id="clima">8. Clima: El Niño, La Niña e mudança do clima</h2>
+<p>O tomate é sensível a calor e a excesso de chuva. Segundo a Embrapa Hortaliças, temperaturas abaixo de 10 °C ou acima de 30 °C prejudicam o pegamento dos frutos, e há queda acentuada de flores com dias de 27–30 °C e noites em torno de 20 °C. Chuva frequente favorece doenças fúngicas e bacterianas e atrapalha a colheita. Calor também acelera a maturação: concentra a oferta num primeiro momento e abre um buraco de oferta semanas depois.</p>
+
+<figure>
+  <h3>O El Niño de 2026 já tem intensidade próxima à de 2015–16</h3>
+  <p class="sub">Índice Oceânico Niño (ONI): anomalia de temperatura do Pacífico equatorial, em °C. Acima de +0,5 indica El Niño; abaixo de −0,5, La Niña</p>
+  <div class="chart" id="cOni"></div>
+  <figcaption>Último valor: +2,46 no trimestre agosto–outubro de 2026. Fonte: NOAA, Climate Prediction Center.</figcaption>
+</figure>
+<figure>
+  <h3>O preço fica acima do padrão sazonal nos dois extremos do ciclo</h3>
+  <p class="sub">Desvio médio do preço real do tomate (IPCA) em relação ao padrão sazonal, por fase do ciclo no mesmo mês, em %</p>
+  <div class="chart" id="cEnso"></div>
+  <figcaption>Meses de janeiro de 2012 a setembro de 2026. La Niña: 36 meses; neutro: 89; El Niño: 52; El Niño forte (ONI ≥ 1,5): 17. Elaboração própria com dados do IBGE e da NOAA.</figcaption>
+</figure>
+<p><b>O que os dados mostram.</b> Em meses de El Niño ou de La Niña, o preço real do tomate ficou em média 6% acima do padrão sazonal; em meses neutros, 6% abaixo. Nos meses de El Niño forte, 15% acima. A relação linear com o índice, porém, é fraca e não é estatisticamente significativa (cada ponto de ONI se associa a +4,4% no preço, p = 0,20). O sinal também perde força quando se olha o índice de seis meses antes.</p>
+<p><b>Como ler isso.</b> O efeito existe, mas não é uma regra simples do tipo “El Niño encarece o tomate”. O fenômeno muda o clima de forma diferente em cada região: mais chuva no Sul, menos no Norte e no Nordeste, mais calor no Sudeste e no Centro-Oeste. O resultado sobre o preço depende de qual polo produtor está colhendo naquele momento.</p>
+<ul>
+  <li><b>2015–16 (El Niño forte):</b> tomate +47,5% em 2015, com chuvas e geadas em lavouras de São Paulo e do Paraná registradas nos boletins da Conab; em 2016 o preço devolveu 27,8%.</li>
+  <li><b>2023–24 (El Niño moderado):</b> segundo o Cepea, as chuvas de setembro a novembro de 2023 prejudicaram as primeiras lavouras do Rio Grande do Sul; as ondas de calor de outubro e novembro aceleraram a maturação e derrubaram preços no fim de 2023; a oferta faltou no início de 2024 e os preços subiram de fevereiro a abril.</li>
+  <li><b>2026 (El Niño forte em formação):</b> calor e umidade no início do ano elevaram a incidência de doenças; entre setembro e outubro choveu fora do padrão seco esperado em regiões produtoras. A oferta nos atacados ficou cerca de um terço abaixo da de um ano antes em outubro, segundo levantamento citado pela imprensa.</li>
+</ul>
+<h3>Mudança do clima</h3>
+<ul>
+  <li><b>Produtividade.</b> Cammarano e coautores (Nature Food, 2022) projetam queda média de 6% na produção de tomate industrial até 2050 nos três maiores produtores (Estados Unidos, Itália e China), com perdas maiores depois. O mecanismo é o encurtamento do ciclo com o calor. O estudo não inclui o Brasil.</li>
+  <li><b>Áreas aptas.</b> Um estudo de modelagem publicado em 2016 (Silva e coautores) conclui que grandes áreas hoje ótimas para tomate a céu aberto tendem a se tornar marginais ou inaptas por calor e seca.</li>
+  <li><b>Extremos.</b> Um estudo de atribuição citado na imprensa concluiu que a mudança do clima amplificou os efeitos do El Niño de 2023–24 no Brasil. Eventos mais frequentes significam mais meses de quebra de oferta e, pelo que se viu acima, mais meses de preço muito acima do padrão.</li>
+  <li><b>Adaptação em curso.</b> A produtividade nacional subiu 11% desde 2015 mesmo com clima adverso, com cultivo protegido, irrigação localizada, híbridos tolerantes e deslocamento de plantio para regiões de altitude. O Cepea registrou em 2025 que a tecnologia sustentou a produtividade mesmo com clima mais chuvoso.</li>
+</ul>
+<div class="note">Não foi localizada projeção quantitativa de impacto da mudança do clima sobre a produtividade do tomate especificamente para o Brasil. Esta é uma lacuna da literatura consultada.</div>
+
+<h2 id="custos">9. Custos de produção</h2>
+<p>O tomate é intensivo em insumos: fertilizantes, defensivos, mudas, estrutura de condução e mão de obra. Os preços internacionais de fertilizantes, convertidos para reais e descontada a inflação, dispararam em 2021–22 e voltaram a subir em 2026.</p>
+<figure>
+  <h3>Fertilizantes mais caros coincidem com o patamar mais alto do tomate em 2021–23</h3>
+  <p class="sub">Índices reais em reais, média de 2015 = 100. Fertilizantes: média de ureia, DAP e cloreto de potássio</p>
+  <div class="legend"><span><i style="background:var(--s6)"></i>Fertilizantes</span><span><i style="background:var(--s8)"></i>Tomate (IPCA, média móvel de 12 meses)</span></div>
+  <div class="chart" id="cFert"></div>
+  <figcaption>Fonte: Banco Mundial (Pink Sheet), Banco Central (câmbio), IBGE. Elaboração própria.</figcaption>
+</figure>
+<p>A correlação entre as médias móveis de 12 meses do preço real do tomate e dos fertilizantes é alta (0,81; 0,83 com seis meses de defasagem). Como as duas séries têm tendência no período, esse número exagera a relação e não prova causa. A leitura prudente é que o custo define o piso em torno do qual o preço oscila: depois de 2021, o tomate passou a oscilar em torno de um nível real mais alto.</p>
+<p>Em outubro de 2026 a ureia estava em US$ 420 por tonelada e o petróleo Brent em US$ 125 por barril, segundo o Banco Mundial. Energia cara encarece frete, embalagem e fertilizantes nitrogenados nos meses seguintes.</p>
+
+<h2 id="industria">10. Tomate industrial</h2>
+<ul>
+  <li>Cerca de 40% do tomate brasileiro vai para a indústria de molhos, extratos e polpas, segundo estimativas do setor.</li>
+  <li>Goiás concentra a produção: 58% do tomate rasteiro no Censo de 2017, com produtividade média de 90 toneladas por hectare em 2025 (inclui os dois tipos).</li>
+  <li>O preço é definido em contrato antes do plantio entre produtor e processadora. Por isso o tomate industrial não entra no IPCA do tomate nem nas cotações das CEASAs, e seu preço varia muito menos.</li>
+  <li>O preço médio ao produtor brasileiro informado à FAO, que mistura os dois segmentos, foi de US$ 418 por tonelada em 2024.</li>
+  <li>A estimativa do IBGE para Goiás em 2026 (1,35 milhão de toneladas) é 19% menor que a colheita de 2025.</li>
+</ul>
+<div class="note"><b>Lacuna:</b> não foi localizada série pública de preços de contrato do tomate industrial. A seção fica restrita a área, produção e estrutura.</div>
+
+<h2 id="mundo">11. Contexto internacional</h2>
+<p>O Brasil é o nono maior produtor mundial, com 2,3% da produção. A produtividade brasileira (72,8 t/ha) é o dobro da média mundial e supera a chinesa e a italiana; fica abaixo da turca, da espanhola e da norte-americana, onde predomina o tomate industrial irrigado.</p>
+<figure>
+  <h3>China e Índia colhem 44% do tomate do mundo</h3>
+  <p class="sub">Produção em 2024, em milhões de toneladas</p>
+  <div class="chart" id="cFao"></div>
+  <figcaption>Produção mundial: 188,5 milhões de toneladas. Fonte: FAOSTAT.</figcaption>
+</figure>
+<div class="tw"><table id="tFaoP"></table></div>
+<p>O tomate fresco quase não é comercializado entre o Brasil e o exterior: é perecível e a produção nacional abastece o mercado interno. O preço doméstico não segue cotação internacional. O canal externo que importa é o do custo: fertilizantes, energia e câmbio. O Banco Mundial não publica preço de tomate; seus dados entram neste relatório apenas como custo de insumos.</p>
+
+<h2 id="persp">12. Perspectivas para 2027–2028</h2>
+<p>A projeção usa um modelo estatístico simples sobre o preço real do tomate no IPCA (janeiro de 2012 a outubro de 2026). O modelo capta dois fatos da série: choques se dissipam em poucos meses e há um padrão sazonal. Ele não conhece clima, área plantada nem custos; por isso os cenários de alta e de baixa são descritos pelas condições que levariam a eles.</p>
+<figure>
+  <h3>O modelo aponta volta à média em 2027, com faixa larga de incerteza</h3>
+  <p class="sub">Índice de preço real do tomate (média de 2015 = 100). Faixas: 50% e 80% de probabilidade segundo o modelo</p>
+  <div class="legend"><span><i style="background:var(--s8)"></i>Observado</span><span><i style="background:var(--ref)"></i>Projeção (cenário base)</span><span><i class="sq" style="background:var(--band2)"></i>Faixa de 50%</span><span><i class="sq" style="background:var(--band)"></i>Faixa de 80%</span></div>
+  <div class="chart" id="cProj"></div>
+  <figcaption id="capProj"></figcaption>
+</figure>
+<div class="tw"><table class="scen" id="tScen"></table></div>
+<h3>O que pesa em cada direção</h3>
+<ul>
+  <li><b>Para baixo, no curto prazo.</b> Preço alto estimula plantio. Com ciclo de três a quatro meses, a oferta tende a reagir entre o fim de 2026 e o primeiro trimestre de 2027. Foi o que ocorreu depois de 2015, 2018 e 2020.</li>
+  <li><b>Para cima, no clima.</b> Se o El Niño forte persistir no verão de 2026–27, o risco é de chuva excessiva no Sul e calor no Sudeste e no Centro-Oeste na safra de verão. Nos meses de El Niño forte da série, o preço ficou em média 15% acima do padrão.</li>
+  <li><b>Para cima, nos custos.</b> Petróleo e ureia em alta em 2026 elevam o custo da safra de 2027. Custo mais alto não impede a queda do pico atual, mas eleva o nível para o qual o preço converge.</li>
+  <li><b>Área.</b> A área colhida de 2026 é a menor desde 2022. A recuperação depende do crédito e do caixa do produtor depois de um ano de perdas de produtividade.</li>
+</ul>
+<div class="note">A projeção é condicional e tem erro grande. No teste com dados até outubro de 2024, o erro médio do modelo nos 24 meses seguintes foi de 15%, pouco melhor que repetir o valor do mesmo mês do ano anterior (16%). A faixa de 80% conteve 83% dos valores observados.</div>
+
+<h2 id="conc">13. Conclusões e riscos a monitorar</h2>
+<div class="box">
+<h3>Conclusões</h3>
+<ul>
+  <li>O problema do tomate é a instabilidade, e não o encarecimento persistente. O preço real médio mudou pouco em dez anos; os picos é que são grandes e frequentes.</li>
+  <li>Os picos nascem de quebras de oferta causadas por clima, amplificadas por demanda pouco sensível ao preço e por um produto que não se estoca.</li>
+  <li>O varejo amortece cerca de 30% das oscilações do atacado e repassa o resto em até dois meses, nas altas e nas quedas.</li>
+  <li>A alta de 2026 é a maior da série e tem a assinatura de um choque de oferta sob El Niño forte. A experiência dos choques anteriores e o modelo indicam devolução ao longo de 2027.</li>
+  <li>A agricultura familiar sustenta o tomate de mesa e é a parte mais exposta à volatilidade. As famílias de menor renda são as que mais reduzem o consumo nos picos.</li>
+</ul>
+</div>
+<div class="box">
+<h3>Riscos a monitorar</h3>
+<ul>
+  <li><b>ONI e previsões sazonais de chuva e temperatura</b> para Sul, Sudeste e Centro-Oeste no verão de 2026–27.</li>
+  <li><b>Volume mensal nas CEASAs</b> (Boletim Hortigranjeiro): é o indicador mais rápido de recomposição da oferta.</li>
+  <li><b>Estimativas de área do LSPA e do Cepea</b> para a safra de verão e de inverno de 2027.</li>
+  <li><b>Fertilizantes, petróleo e câmbio</b>, que definem o custo da próxima safra.</li>
+  <li><b>Pragas e doenças</b> favorecidas por calor e umidade.</li>
+  <li><b>Diferença entre praças:</b> Norte e Nordeste têm menos fontes alternativas de abastecimento e reagem de forma própria.</li>
+</ul>
+</div>
+
+<h2 id="metodo">14. Método, lacunas e fontes</h2>
+<ul>
+  <li><b>Preço real.</b> Valores do atacado corrigidos pelo IPCA geral nacional para reais de outubro de 2026. O índice real do varejo é a razão entre o índice encadeado do subitem tomate e o IPCA geral.</li>
+  <li><b>Atacado.</b> Preços médios mensais por CEASA extraídos das tabelas dos boletins da Conab (PDF de 2015 a 2023) e das planilhas de dados (2023 a 2026). Quando um mês faltava, usou-se o valor implícito na variação mensal publicada no boletim seguinte. Não há dados de janeiro a março de 2015. A Conab mudou a lista de centrais ao longo do tempo; Brasília tem série até julho de 2024.</li>
+  <li><b>Sazonalidade.</b> Razão entre o preço real e a média móvel centrada de 12 meses, média por mês do ano.</li>
+  <li><b>Repasse.</b> Mínimos quadrados da variação mensal em log do IPCA do tomate sobre a variação do atacado no mês e em duas defasagens; assimetria testada separando variações positivas e negativas.</li>
+  <li><b>Clima.</b> Desvio do log do preço real em relação à média do mesmo mês do ano (2012–2026), comparado ao ONI. Erros-padrão robustos a autocorrelação.</li>
+  <li><b>Projeção.</b> <span id="mModelo"></span>, estimado sobre o log do índice real, escolhido por critério de informação entre 12 especificações.</li>
+  <li><b>Literatura.</b> Os estudos citados foram consultados por resumos e resultados de busca, sem leitura integral. Números atribuídos a eles devem ser conferidos na fonte antes de uso formal.</li>
+  <li><b>Não obtidos.</b> Séries do Hortifruti Brasil/Cepea (o site recusou o acesso automatizado), base completa do Prohort, preços de contrato do tomate industrial, CEASA da Bahia e custo total de produção por hectare atualizado.</li>
+</ul>
+<h3 id="ia">Uso de inteligência artificial</h3>
+<div class="note">Este estudo foi elaborado com apoio de um assistente de inteligência artificial (Claude, da Anthropic), sob orientação e responsabilidade do autor. A IA coletou os dados nas fontes oficiais, escreveu os scripts de análise, produziu os gráficos e redigiu o texto. O conteúdo não passou por revisão por pares. Podem existir erros de extração, de cálculo ou de interpretação; confira os números nas fontes originais antes de usá-los em decisões ou citações. Os dados e o código estão no <a href="https://github.com/marcelo7bastos/estudo_express_inflacao_produto/tree/main/tomate">repositório</a> para verificação.</div>
+<h3>Fontes de dados</h3>
+<ul class="src">
+  <li>IBGE, IPCA: <a href="https://sidra.ibge.gov.br/tabela/7060">tabela 7060</a> e <a href="https://sidra.ibge.gov.br/tabela/1419">tabela 1419</a></li>
+  <li>IBGE, Produção Agrícola Municipal: <a href="https://sidra.ibge.gov.br/tabela/1612">tabela 1612</a>; LSPA: <a href="https://sidra.ibge.gov.br/tabela/6588">tabela 6588</a></li>
+  <li>IBGE, Censo Agropecuário 2017: <a href="https://sidra.ibge.gov.br/tabela/6953">tabela 6953</a> (horticultura) e <a href="https://sidra.ibge.gov.br/tabela/6957">tabela 6957</a> (lavoura temporária)</li>
+  <li>IBGE, POF: <a href="https://sidra.ibge.gov.br/tabela/2393">tabela 2393</a> e <a href="https://sidra.ibge.gov.br/tabela/8157">tabela 8157</a></li>
+  <li>Conab, <a href="https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/hortigranjeiros-prohort/boletim-hortigranjeiro">Boletim Hortigranjeiro (Prohort)</a>, edições de 2015 a outubro de 2026</li>
+  <li>NOAA Climate Prediction Center, <a href="https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt">Oceanic Niño Index</a></li>
+  <li>Banco Mundial, <a href="https://www.worldbank.org/en/research/commodity-markets">Commodity Price Data (Pink Sheet)</a></li>
+  <li>FAO, <a href="https://www.fao.org/faostat/en/#data">FAOSTAT</a>: produção e preços ao produtor</li>
+  <li>Banco Central do Brasil, SGS série 3698 (câmbio médio mensal)</li>
+</ul>
+<h3>Estudos e análises citados</h3>
+<ul class="src">
+  <li>Cepea/Hortifruti Brasil, <a href="https://hfbrasil.org.br/br/revista/acessar/completo/el-nio-temperaturas-elevadas-afetam-producao-dos-hfs-em-2023-24.aspx">El Niño: temperaturas elevadas afetam produção dos HFs em 2023/24</a>; <a href="https://www.hfbrasil.org.br/br/tomate-cepea-custo-de-producao-em-mogi-guacu.aspx">Custo de produção em Mogi Guaçu</a></li>
+  <li>Embrapa Hortaliças, <a href="https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/777959/1/giordanoselecao.pdf">seleção de tomate para tolerância ao calor</a></li>
+  <li>Cammarano et al. (2022), Nature Food, resumido em <a href="https://www.nature.com/articles/d43978-022-00079-0">Nature Italy</a></li>
+  <li>Silva et al. (2016), <a href="https://www.cambridge.org/core/product/0F9D27D4BC00DE3F5F911A520E63104A/core-reader">projeção de áreas aptas ao tomate sob mudança do clima</a></li>
+  <li>Barros e Fiallos (1982), margens e transmissão de preços do tomate, citado em <a href="https://iea.agricultura.sp.gov.br/ftpiea/publicacoes/ie/2014/tec2-0414.pdf">IEA/SP</a></li>
+  <li>Claro e Monteiro, <a href="https://scielosp.org/pdf/csp/2011.v27n4/639-647/pt">renda, preço dos alimentos e participação de frutas e hortaliças</a>, Cadernos de Saúde Pública</li>
+  <li>Imprensa sobre 2026: <a href="https://exame.com/agro/por-que-o-tomate-esta-tao-caro-preco-sobe-60-no-ano-e-oferta-cai-33/">Exame</a>; <a href="https://www.noticiasagricolas.com.br/noticias/hortifruti/415727-producao-de-tomate-supera-recorde-com-4-7-milhoes-de-toneladas-colhidas-em-2025-mas-enfrenta-desafios.html">Notícias Agrícolas</a>; <a href="https://goias.gov.br/agricultura/?p=96012">Governo de Goiás</a></li>
+</ul>
+<footer>{{AUTOR}}. Elaboração com apoio de inteligência artificial, a partir de dados públicos. Os números podem ser revisados pelas fontes.</footer>
+</div>
+
+<script>
+const D=/*DATA*/;
+const $=id=>document.getElementById(id);
+const nf=(v,d=1)=>v==null||isNaN(v)?'–':Number(v).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const MES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const ml=m=>MES[+m.slice(5)-1]+'/'+m.slice(2,4);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const S=(tag,at,par)=>{const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const k in at)e.setAttribute(k,at[k]);if(par)par.appendChild(e);return e};
+let state={periodo:'2015',valor:'real'};
+const redraws=[];
+function niceTicks(lo,hi,n=5){const span=hi-lo||1;const step0=span/n;const mag=Math.pow(10,Math.floor(Math.log10(step0)));const step=[1,2,2.5,5,10].map(x=>x*mag).find(x=>x>=step0);const a=Math.floor(lo/step)*step,b=Math.ceil(hi/step)*step;const t=[];for(let v=a;v<=b+step*1e-6;v+=step)t.push(+v.toFixed(10));return t}
+function startIdx(labels){if(state.periodo==='2015')return Math.max(0,labels.findIndex(m=>m>='2015-01'));if(state.periodo==='2020')return Math.max(0,labels.findIndex(m=>m>='2020-01'));return Math.max(0,labels.length-24)}
+
+/* Gráfico de linhas com eixo temporal mensal, cursor e tabela de dados */
+function lineChart(id,get){
+  const host=$(id);
+  function draw(){
+    const cfg=get();let labels=cfg.labels,series=cfg.series.filter(s=>s);
+    const i0=cfg.fixed?0:startIdx(labels);labels=labels.slice(i0);
+    series=series.map(s=>({...s,vals:s.vals.slice(i0)}));
+    const bands=(cfg.bands||[]).map(b=>({...b,lo:b.lo.slice(i0),hi:b.hi.slice(i0)}));
+    const W=Math.max(300,host.clientWidth),H=cfg.h||Math.round(Math.min(340,Math.max(230,W*0.42)));
+    const m={l:44,r:cfg.endLabels?86:14,t:10,b:26};
+    host.innerHTML='';const svg=S('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':cfg.aria||''},host);
+    let all=[];series.forEach(s=>s.vals.forEach(v=>v!=null&&all.push(v)));bands.forEach(b=>{b.lo.forEach(v=>v!=null&&all.push(v));b.hi.forEach(v=>v!=null&&all.push(v))});
+    (cfg.hlines||[]).forEach(h=>all.push(h.v));if(cfg.zero)all.push(0);
+    let lo=Math.min(...all),hi=Math.max(...all);if(cfg.min!=null)lo=Math.min(lo,cfg.min);
+    const ticks=niceTicks(lo,hi,5);lo=ticks[0];hi=ticks[ticks.length-1];
+    const n=labels.length,x=i=>m.l+(n>1?i/(n-1):0)*(W-m.l-m.r),y=v=>m.t+(1-(v-lo)/(hi-lo))*(H-m.t-m.b);
+    ticks.forEach(t=>{S('line',{x1:m.l,x2:W-m.r,y1:y(t),y2:y(t),stroke:t===0&&cfg.zero?css('--axis'):css('--line'),'stroke-width':1},svg);const tx=S('text',{x:m.l-6,y:y(t)+4,'text-anchor':'end'},svg);tx.textContent=nf(t,cfg.dec??0)});
+    const stepY=n>100?2:1;let lastX=-99;
+    labels.forEach((mm,i)=>{const isJan=mm.slice(5)==='01';const short=n<=30;if((short&&(i%3===0))||(!short&&isJan&&(+mm.slice(0,4))%stepY===0)){const px=x(i);if(px-lastX<34)return;lastX=px;S('line',{x1:px,x2:px,y1:H-m.b,y2:H-m.b+4,stroke:css('--axis')},svg);const tx=S('text',{x:px,y:H-8,'text-anchor':'middle'},svg);tx.textContent=short?ml(mm):mm.slice(0,4)}});
+    bands.forEach(b=>{let p='',q='';b.lo.forEach((v,i)=>{if(v==null)return;p+=(p?'L':'M')+x(i)+','+y(b.hi[i]);q='L'+x(i)+','+y(v)+q});if(p)S('path',{d:p+q+'Z',fill:css(b.color),stroke:'none'},svg)});
+    (cfg.hlines||[]).forEach(h=>{S('line',{x1:m.l,x2:W-m.r,y1:y(h.v),y2:y(h.v),stroke:css('--ref'),'stroke-width':1,'stroke-dasharray':'4 4'},svg);if(h.label){const tx=S('text',{x:m.l+4,y:y(h.v)-5,class:'lab'},svg);tx.textContent=h.label}});
+    if(cfg.area){const s=series[0];let segs=[],cur=[];s.vals.forEach((v,i)=>{if(v==null){if(cur.length)segs.push(cur);cur=[]}else cur.push(i)});if(cur.length)segs.push(cur);
+      segs.forEach(seg=>{['pos','neg'].forEach(k=>{let p='M'+x(seg[0])+','+y(0);seg.forEach(i=>{const v=s.vals[i];p+='L'+x(i)+','+y(k==='pos'?Math.max(v,0):Math.min(v,0))});p+='L'+x(seg[seg.length-1])+','+y(0)+'Z';S('path',{d:p,fill:css(k==='pos'?'--s8':'--s1'),'fill-opacity':.35,stroke:'none'},svg)})})}
+    series.forEach(s=>{let p='',pen=false;s.vals.forEach((v,i)=>{if(v==null){pen=false;return}p+=(pen?'L':'M')+x(i).toFixed(1)+','+y(v).toFixed(1);pen=true});
+      S('path',{d:p,fill:'none',stroke:css(s.color),'stroke-width':s.w||2,'stroke-linejoin':'round','stroke-linecap':'round','stroke-dasharray':s.dash||'none',opacity:s.op||1},svg);
+      if(cfg.endLabels){let li=s.vals.length-1;while(li>=0&&s.vals[li]==null)li--;if(li>=0){S('circle',{cx:x(li),cy:y(s.vals[li]),r:3.5,fill:css(s.color),stroke:css('--surface'),'stroke-width':2},svg);s._ey=y(s.vals[li]);s._ex=x(li)}}});
+    if(cfg.endLabels){const ls=series.filter(s=>s._ey!=null).sort((a,b)=>a._ey-b._ey);for(let i=1;i<ls.length;i++)if(ls[i]._ey-ls[i-1]._ey<13)ls[i]._ey=ls[i-1]._ey+13;ls.forEach(s=>{const tx=S('text',{x:W-m.r+8,y:s._ey+4,class:'lab'},svg);tx.textContent=s.short||s.name})}
+    const cur=S('line',{y1:m.t,y2:H-m.b,stroke:css('--ink2'),'stroke-width':1,visibility:'hidden'},svg);const dots=series.map(s=>S('circle',{r:4,fill:css(s.color),stroke:css('--surface'),'stroke-width':2,visibility:'hidden'},svg));
+    const tip=document.createElement('div');tip.className='tip';tip.hidden=true;host.appendChild(tip);
+    const ov=S('rect',{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b,fill:'transparent'},svg);
+    function mv(e){const r=svg.getBoundingClientRect();const px=(e.clientX-r.left)*W/r.width;let i=Math.round((px-m.l)/(W-m.l-m.r)*(n-1));i=Math.max(0,Math.min(n-1,i));cur.setAttribute('x1',x(i));cur.setAttribute('x2',x(i));cur.setAttribute('visibility','visible');
+      let h='<b>'+ml(labels[i])+'</b>';series.forEach((s,k)=>{const v=s.vals[i];if(v==null){dots[k].setAttribute('visibility','hidden');return}dots[k].setAttribute('cx',x(i));dots[k].setAttribute('cy',y(v));dots[k].setAttribute('visibility','visible');h+='<br><i style="background:'+css(s.color)+'"></i>'+s.name+': <b>'+nf(v,cfg.tdec??cfg.dec??1)+(cfg.unit||'')+'</b>'});
+      bands.slice(0,1).forEach(b=>{if(b.lo[i]!=null)h+='<br>Faixa de 80%: '+nf(b.lo[i],0)+' a '+nf(b.hi[i],0)});
+      tip.innerHTML=h;tip.hidden=false;const tw=tip.offsetWidth,sx=x(i)*r.width/W;tip.style.left=Math.max(0,Math.min(r.width-tw,sx+(sx>r.width/2?-tw-12:12)))+'px';tip.style.top='8px'}
+    function out(){cur.setAttribute('visibility','hidden');dots.forEach(d=>d.setAttribute('visibility','hidden'));tip.hidden=true}
+    ov.addEventListener('pointermove',mv);ov.addEventListener('pointerdown',mv);ov.addEventListener('pointerleave',out);
+    if(cfg.table!==false){const det=document.createElement('details');det.innerHTML='<summary>Ver dados em tabela</summary>';const tw=document.createElement('div');tw.className='tw';let h='<table><tr><th>Mês</th>'+series.map(s=>'<th>'+s.name+'</th>').join('')+'</tr>';for(let i=n-1;i>=0;i--)h+='<tr><td>'+ml(labels[i])+'</td>'+series.map(s=>'<td>'+nf(s.vals[i],cfg.tdec??cfg.dec??1)+'</td>').join('')+'</tr>';tw.innerHTML=h+'</table>';det.appendChild(tw);const old=host.parentNode.querySelector('details.auto');const open=old&&old.open;if(old)old.remove();det.className='auto';det.open=!!open;host.after(det)}
+  }
+  redraws.push(draw);draw();
+}
+/* Barras: verticais agrupadas ou horizontais */
+function barChart(id,cfg){
+  const host=$(id);
+  function draw(){
+    const W=Math.max(280,host.clientWidth);host.innerHTML='';
+    const tip=document.createElement('div');tip.className='tip';tip.hidden=true;
+    const hov=(el,html)=>{el.addEventListener('pointerenter',e=>{tip.innerHTML=html;tip.hidden=false});el.addEventListener('pointermove',e=>{const r=host.getBoundingClientRect();const tw=tip.offsetWidth;tip.style.left=Math.max(0,Math.min(r.width-tw,e.clientX-r.left+12))+'px';tip.style.top=Math.max(0,e.clientY-r.top-44)+'px'});el.addEventListener('pointerleave',()=>tip.hidden=true)};
+    if(cfg.horizontal){const rowH=26,lw=cfg.lw||Math.min(150,W*0.36),m={l:lw,r:cfg.rw||92,t:4,b:4};const H=m.t+m.b+cfg.cats.length*rowH;const svg=S('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':cfg.aria||''},host);
+      const max=Math.max(...cfg.vals);cfg.cats.forEach((c,i)=>{const yy=m.t+i*rowH,bw=Math.max(1,cfg.vals[i]/max*(W-m.l-m.r));const t=S('text',{x:m.l-8,y:yy+rowH/2+4,'text-anchor':'end',class:'lab'},svg);t.textContent=c;
+        const hi=cfg.highlight&&cfg.highlight.includes(c);const r=S('path',{d:`M${m.l},${yy+4}h${bw-4}a4,4 0 0 1 4,4v${rowH-16}a4,4 0 0 1 -4,4h${-(bw-4)}z`,fill:css(hi?'--s8':(cfg.color||'--s1'))},svg);
+        const v=S('text',{x:m.l+bw+6,y:yy+rowH/2+4,class:'val'},svg);v.textContent=cfg.fmt(cfg.vals[i],i);hov(r,'<b>'+c+'</b><br>'+cfg.fmt(cfg.vals[i],i))})}
+    else{const H=cfg.h||230,m={l:40,r:8,t:16,b:cfg.bb||26};const svg=S('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':cfg.aria||''},host);
+      let all=cfg.series.flatMap(s=>s.vals).filter(v=>v!=null);let lo=Math.min(0,...all),hi=Math.max(...all);if(cfg.base!=null){lo=Math.min(...all);}
+      const ticks=niceTicks(cfg.base!=null?Math.min(lo,cfg.base)-5:lo,Math.max(hi,cfg.base??hi),4);lo=ticks[0];hi=ticks[ticks.length-1];const base=cfg.base??0;
+      const y=v=>m.t+(1-(v-lo)/(hi-lo))*(H-m.t-m.b);ticks.forEach(t=>{S('line',{x1:m.l,x2:W-m.r,y1:y(t),y2:y(t),stroke:t===base?css('--axis'):css('--line')},svg);const tx=S('text',{x:m.l-6,y:y(t)+4,'text-anchor':'end'},svg);tx.textContent=nf(t,cfg.dec??0)});
+      const n=cfg.cats.length,gw=(W-m.l-m.r)/n,k=cfg.series.length,bw=Math.min(34,(gw-8-(k-1)*2)/k);
+      cfg.cats.forEach((c,i)=>{const cx=m.l+gw*i+gw/2;const lines=String(c).split('\n');lines.forEach((ln,j)=>{const tx=S('text',{x:cx,y:H-m.b+14+j*12,'text-anchor':'middle'},svg);tx.textContent=ln});
+        cfg.series.forEach((s,j)=>{const v=s.vals[i];if(v==null)return;const x0=cx-(k*bw+(k-1)*2)/2+j*(bw+2);const y0=y(Math.max(v,base)),h=Math.max(1,Math.abs(y(v)-y(base)));const up=v>=base;const rr=Math.min(4,h);
+          const d=up?`M${x0},${y0+h}v${-(h-rr)}a${rr},${rr} 0 0 1 ${rr},${-rr}h${bw-2*rr}a${rr},${rr} 0 0 1 ${rr},${rr}v${h-rr}z`:`M${x0},${y0}v${h-rr}a${rr},${rr} 0 0 0 ${rr},${rr}h${bw-2*rr}a${rr},${rr} 0 0 0 ${rr},${-rr}v${-(h-rr)}z`;
+          const r=S('path',{d,fill:css(typeof s.color==='function'?s.color(v,i):s.color)},svg);hov(r,'<b>'+String(c).replace('\n',' ')+'</b><br>'+(s.name?s.name+': ':'')+'<b>'+nf(v,cfg.tdec??cfg.dec??1)+(cfg.unit||'')+'</b>');
+          if(cfg.labels&&bw>=18){const tx=S('text',{x:x0+bw/2,y:up?y0-4:y0+h+12,'text-anchor':'middle',class:'val'},svg);tx.textContent=nf(v,cfg.tdec??cfg.dec??1)}})})}
+    host.appendChild(tip)}
+  redraws.push(draw);draw();
+}
+function table(id,head,rows){$(id).innerHTML='<tr>'+head.map(h=>'<th>'+h+'</th>').join('')+'</tr>'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')}
+
+const M=D.months;
+/* 1. IPCA */
+lineChart('c12m',()=>({labels:M,series:[{name:'Tomate',color:'--s8',vals:D.ipca.v12},{name:'IPCA geral',color:'--s1',vals:D.ipca.g12}],zero:true,unit:'%',dec:0,tdec:1,aria:'Variação em 12 meses do tomate e do IPCA geral'}));
+lineChart('cReal',()=>({labels:M,series:[{name:'Preço real do tomate',color:'--s8',vals:D.ipca.real}],hlines:[{v:D.real_med,label:'média 2015–2026'}],dec:0,tdec:1,aria:'Índice de preço real do tomate'}));
+table('tAnual',['Ano','Tomate (%)','IPCA geral (%)','Contribuição do tomate (p.p.)','Preço real médio (2015 = 100)'],D.anual.filter(a=>a.ano>=2015).map(a=>[a.ano+(a.parcial?' (até out.)':''),nf(a.tom,1),nf(a.geral,2),nf(a.contrib,2),nf(a.real_med,1)]));
+/* 2. Praças */
+const PR={SP:['São Paulo','--s1'],BH:['Belo Horizonte','--s2'],RJ:['Rio de Janeiro','--s3'],ES:['Vitória','--s4'],PR:['Curitiba','--s5'],GO:['Goiânia','--s6'],PE:['Recife','--s7'],CE:['Fortaleza','--s8']};
+const EXTRA={DF:'Brasília',Campinas:'Campinas',SC:'São José (SC)'};
+let sel=new Set(['SP','PE','PR']);
+try{const s=JSON.parse(localStorage.getItem('tomate-pracas')||'null');if(Array.isArray(s)&&s.length)sel=new Set(s.filter(k=>PR[k]))}catch(e){}
+const chips=$('chipsW');Object.keys(PR).forEach(k=>{const b=document.createElement('button');b.type='button';b.id='chip-'+k;b.innerHTML='<i style="background:var('+PR[k][1]+')"></i>'+PR[k][0];b.setAttribute('aria-pressed',sel.has(k));b.onclick=()=>{sel.has(k)?sel.delete(k):sel.add(k);b.setAttribute('aria-pressed',sel.has(k));try{localStorage.setItem('tomate-pracas',JSON.stringify([...sel]))}catch(e){}drawAll()};chips.appendChild(b)});
+lineChart('cW',()=>{const real=state.valor==='real';const src=real?D.wr:D.w;$('subW').textContent='Preço médio mensal do tomate no atacado, R$ por kg, '+(real?'em valores de outubro de 2026':'em valores correntes');
+  return{labels:D.wmonths,series:[{name:'Média 8 praças',short:'Média',color:'--ref',vals:real?D.comp:D.compn,dash:'5 4',w:2},...Object.keys(PR).filter(k=>sel.has(k)).map(k=>({name:PR[k][0],color:PR[k][1],vals:src[k]}))],dec:0,tdec:2,min:0,endLabels:sel.size<=4,aria:'Preço do tomate no atacado por praça'}});
+const ws=D.wstat;table('tW',['Praça','Média real 2015–26 (R$/kg)','Mínimo','Máximo','Média 2025','Média 2026 (jan–set)','Último dado','Coef. de variação (%)','Correlação com SP'],
+ [...Object.keys(PR),...Object.keys(EXTRA)].map(k=>[(PR[k]?PR[k][0]:EXTRA[k]),nf(ws[k].media,2),nf(ws[k].min,2),nf(ws[k].max,2),nf(ws[k].m2025,2),nf(ws[k].m2026,2),nf(ws[k].ult,2)+' ('+ml(ws[k].ult_m)+')',nf(ws[k].cv,0),k==='SP'?'–':nf(ws[k].corr_sp,2)]));
+table('tCorr',['',...D.corr.labels.map(k=>PR[k][0])],D.corr.m.map((r,i)=>[PR[D.corr.labels[i]][0],...r.map((v,j)=>j>i?'':nf(v,2))]));
+const regNames=Object.keys(D.reg).sort((a,b)=>D.reg[b].ytd-D.reg[a].ytd);
+const selReg=$('selReg');regNames.filter(a=>D.reg[a].acum!=null&&!isNaN(D.reg[a].acum)).sort().forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;selReg.appendChild(o)});selReg.value='Rio de Janeiro - RJ';selReg.onchange=drawAll;
+lineChart('cReg',()=>{const a=selReg.value;$('legRegName').textContent=a;return{labels:M,series:[{name:'Brasil',color:'--ref',vals:D.ipca.real,w:1.5},{name:a,color:'--s7',vals:D.reg[a].real}],dec:0,tdec:1,aria:'Preço real do tomate no varejo por área'}});
+table('tReg',['Área','Alta em 2026 até out. (%)','Em 12 meses (%)','Desvio-padrão mensal (p.p.)','Peso do tomate no IPCA local (%)'],[['Brasil',nf(89.8,1),nf(63.3,1),nf(D.vol.tom,1),nf(0.30,2)],...regNames.map(a=>[a,nf(D.reg[a].ytd,1),nf(D.reg[a].v12,1),nf(D.reg[a].dp,1),nf(D.reg[a].peso,2)])]);
+/* 3. Repasse */
+const ptk=['pool','CE','RJ','BH','PR','ES','SP','DF','GO','PE'];const ptn=k=>k==='pool'?'Conjunto':(PR[k]?PR[k][0]:EXTRA[k]);
+barChart('cPT',{cats:ptk.map(k=>ptn(k).replace(' ','\n')),series:[{name:'No mesmo mês',color:'--s1',vals:ptk.map(k=>D.pt[k].b0)},{name:'No mês seguinte',color:'--s2',vals:ptk.map(k=>D.pt[k].b1)}],dec:1,tdec:2,h:250,bb:38,aria:'Repasse do atacado ao varejo por cidade'});
+table('tPT',['Cidade','Mesmo mês','Mês seguinte','Dois meses depois','Repasse total','R²','Altas','Quedas','Meses'],ptk.map(k=>{const p=D.pt[k];return[ptn(k),nf(p.b0,2),nf(p.b1,2),nf(p.b2,2),nf(p.soma,2),nf(p.r2,2),nf(p.up,2),nf(p.dn,2),nf(p.n,0)]}));
+/* 4. Sazonalidade */
+barChart('cSaz',{cats:MES,series:[{name:'Atacado',color:'--s2',vals:D.saz_w},{name:'Varejo',color:'--s8',vals:D.saz_ipca}],base:100,dec:0,tdec:1,h:240,aria:'Índice sazonal do preço do tomate'});
+/* 5. Produção */
+const totP=D.pam_br.prod[D.pam_br.prod.length-1];const ufs=D.uf.slice(0,11);
+barChart('cUF',{horizontal:true,cats:ufs.map(u=>u.uf),vals:ufs.map(u=>u.p25/1000),fmt:(v)=>nf(v,0)+' · '+nf(v*1000/totP*100,1)+'%',color:'--s3',rw:104,aria:'Produção de tomate por estado em 2025'});
+const anos=D.pam_br.anos.filter(a=>a>=2015).concat([2026]);const ai=a=>D.pam_br.anos.indexOf(a);
+barChart('cProd',{cats:anos.map(a=>"'"+String(a).slice(2)),series:[{name:'Produção (milhões de t)',color:(v,i)=>i===anos.length-1?'--s4':'--s3',vals:anos.map(a=>a===2026?D.lspa.br['35']/1e6:D.pam_br.prod[ai(a)]/1e6)}],dec:0,tdec:2,h:210,aria:'Produção de tomate por ano'});
+barChart('cRend',{cats:anos.map(a=>"'"+String(a).slice(2)),series:[{name:'Produtividade (t/ha)',color:(v,i)=>i===anos.length-1?'--s4':'--s3',vals:anos.map(a=>a===2026?D.lspa.br['36']/1000:D.pam_br.rend[ai(a)]/1000)}],dec:0,tdec:1,h:210,aria:'Produtividade do tomate por ano'});
+table('tMun',['Município','Produção em '+D.mun.ano+' (mil t)','Área colhida (ha)','Produtividade (t/ha)'],D.mun.top.slice(0,10).map(r=>[r[0],nf(r[1]/1000,1),nf(r[2],0),nf(r[1]/r[2],0)]));
+const ot=D.origem.uf.reduce((a,b)=>a+b[1],0);table('tOrig',['Estado de origem','Volume em set/2026 (t)','Participação (%)'],D.origem.uf.slice(0,10).map(r=>[r[0],nf(r[1]/1000,0),nf(r[1]/ot*100,1)]));
+/* 6. AF */
+const ce=D.censo.estaq.Brasil,cr=D.censo.rast.Brasil;
+table('tAF',['Brasil, 2017','Estabelecimentos','dos quais familiares (%)','Produção (mil t)','da agricultura familiar (%)'],[['Tomate de mesa (estaqueado)',nf(ce.n,0),nf(ce.naf/ce.n*100,1),nf(ce.q/1000,0),nf(ce.af/ce.q*100,1)],['Tomate industrial (rasteiro)',nf(cr.n,0),nf(cr.naf/cr.n*100,1),nf(cr.q/1000,0),nf(cr.af/cr.q*100,1)],['Total',nf(ce.n+cr.n,0),nf((ce.naf+cr.naf)/(ce.n+cr.n)*100,1),nf((ce.q+cr.q)/1000,0),nf((ce.af+cr.af)/(ce.q+cr.q)*100,1)]]);
+const afu=Object.entries(D.censo.estaq).filter(([u,v])=>u!=='Brasil'&&v.q>=15000).sort((a,b)=>b[1].q-a[1].q);
+table('tAFuf',['Tomate de mesa por estado, 2017','Produção (mil t)','Agricultura familiar no volume (%)','Estabelecimentos familiares (%)'],afu.map(([u,v])=>[u,nf(v.q/1000,0),nf(v.af/v.q*100,1),nf(v.naf/v.n*100,1)]));
+/* 7. Consumo */
+const pb=D.pof.Brasil;barChart('cPof',{cats:['2002–03','2008–09','2017–18'],series:[{name:'Tomate',color:'--s8',vals:['2002','2008','2018'].map(y=>pb['2.2.12 Tomate'][y])},{name:'Molho de tomate',color:'--s4',vals:['2002','2008','2018'].map(y=>pb['13.2.9 Molho de tomate'][y])},{name:'Massa de tomate',color:'--s7',vals:['2002','2008','2018'].map(y=>pb['13.2.8 Massa de tomate'][y])}],dec:0,tdec:2,labels:true,h:230,unit:' kg',aria:'Aquisição domiciliar de tomate e derivados'});
+const rk=Object.keys(D.pof_renda).filter(k=>k!=='Total');barChart('cRenda',{horizontal:true,cats:rk.map(k=>k.replace(' Reais','').replace('Mais de ','').replace(' a ','–').replace('Até ','até ').replace(/^14\.310$/,'acima de 14.310')),vals:rk.map(k=>D.pof_renda[k]['2.2.12 Tomate']),fmt:v=>nf(v,1)+' kg',color:'--s8',lw:112,rw:56,aria:'Consumo de tomate por faixa de renda'});
+lineChart('cQ',()=>({labels:D.q.months,series:[{name:'Volume (mil t)',color:'--s3',vals:D.q.t}],dec:0,tdec:1,min:25,fixed:true,aria:'Volume de tomate nas CEASAs'}));
+/* 8. Clima */
+lineChart('cOni',()=>({labels:M,series:[{name:'ONI',color:'--ink2',vals:D.oni,w:1.5}],area:true,zero:true,hlines:[{v:0.5},{v:-0.5}],dec:1,tdec:2,h:230,table:false,aria:'Índice Oceânico Niño'}));
+barChart('cEnso',{cats:['La Niña','Neutro','El Niño','El Niño forte\n(ONI ≥ 1,5)'],series:[{name:'Desvio do padrão sazonal',color:(v)=>v>=0?'--s8':'--s1',vals:[D.enso['0'].media['La Niña'],D.enso['0'].media['Neutro'],D.enso['0'].media['El Niño'],D.enso_forte.el]}],dec:0,tdec:1,labels:true,unit:'%',h:220,bb:38,aria:'Preço do tomate por fase do ENSO'});
+/* 9. Custos */
+const ma=(a,n)=>a.map((v,i)=>{if(i<n-1)return null;let s=0;for(let j=i-n+1;j<=i;j++){if(a[j]==null)return null;s+=a[j]}return s/n});
+lineChart('cFert',()=>({labels:M,series:[{name:'Fertilizantes',color:'--s6',vals:D.fert_idx},{name:'Tomate (média de 12 meses)',color:'--s8',vals:ma(D.ipca.real,12)}],hlines:[{v:100}],dec:0,tdec:0,aria:'Fertilizantes e preço real do tomate'}));
+/* 11. Mundo */
+const fn={'China, mainland':'China','India':'Índia','Türkiye':'Turquia','United States of America':'Estados Unidos','Egypt':'Egito','Italy':'Itália','Spain':'Espanha','Mexico':'México','Brazil':'Brasil','Nigeria':'Nigéria','Iran (Islamic Republic of)':'Irã','Russian Federation':'Rússia'};
+barChart('cFao',{horizontal:true,cats:D.fao_prod.map(r=>fn[r[0]]||r[0]),vals:D.fao_prod.map(r=>r[1]/1e6),fmt:(v,i)=>nf(v,1)+' · '+nf(D.fao_prod[i][2]/1000,0)+' t/ha',color:'--s3',highlight:['Brasil'],rw:112,aria:'Maiores produtores mundiais de tomate'});
+const fy=[2015,2019,2022,2023,2024];table('tFaoP',['Preço ao produtor (US$/t)',...fy],Object.entries(D.fao_price).map(([c,v])=>[fn[c]||({Portugal:'Portugal',Chile:'Chile'})[c]||c,...fy.map(y=>nf(v[y],0))]));
+/* 12. Projeção */
+(function(){const P=D.proj;const h0=M.findIndex(m=>m>='2022-01');const hist=D.ipca.real.slice(h0);const labs=M.slice(h0).concat(P.months);const pad=a=>Array(hist.length-1).fill(null).concat([hist[hist.length-1]],a);
+  lineChart('cProj',()=>({labels:labs,fixed:true,series:[{name:'Observado',color:'--s8',vals:hist.concat(Array(P.months.length).fill(null))},{name:'Projeção',color:'--ref',vals:pad(P.base),dash:'5 4'}],bands:[{lo:pad(P.lo80),hi:pad(P.hi80),color:'--band'},{lo:pad(P.lo50),hi:pad(P.hi50),color:'--band'}],hlines:[{v:D.real_med,label:'média 2015–2026'}],dec:0,tdec:1,h:320,aria:'Projeção do preço real do tomate'}));
+  const k=D.k_atacado,a=D.proj_ano;const cur=D.ipca.real[D.ipca.real.length-1];
+  $('capProj').textContent='Último dado observado: outubro de 2026 ('+nf(cur,1)+'). Modelo '+P.modelo.replace(/, /g,',')+'. Elaboração própria com dados do IBGE.';
+  $('mModelo').textContent='Modelo '+P.modelo.replace(/, /g,',');
+  const row=(nome,key,cond)=>[nome,...[2027,2028].flatMap(y=>[nf(a[y][key],0),'R$ '+nf(a[y][key]*k,2),nf((a[y][key]/D.real_2026-1)*100,0)+'%']),cond];
+  $('tScen').innerHTML='<tr><th>Cenário</th><th>Índice real 2027</th><th>Atacado 2027 (R$/kg)</th><th>2027 ante 2026</th><th>Índice real 2028</th><th>Atacado 2028 (R$/kg)</th><th>2028 ante 2026</th><th>Condições</th></tr>'+
+   [row('Alta','hi','El Niño forte até o outono de 2027, com chuva no Sul e calor no Sudeste; fertilizantes e diesel em alta; área não se recupera.'),row('Base','base','Clima volta ao normal ao longo de 2027; plantio reage ao preço alto; custos estáveis em termos reais.'),row('Baixa','lo','Clima favorável nas duas safras; área maior em resposta aos preços de 2026; oferta concentrada derruba o preço, como em 2016–17 e 2019.')]
+   .map(r=>'<tr>'+r.map((c,i)=>'<td'+(i>0&&i<7?' class="n"':'')+'>'+c+'</td>').join('')+'</tr>').join('');
+  const cap=document.createElement('p');cap.style.fontSize='13px';cap.style.color='var(--muted)';cap.textContent='Médias anuais. Alta e baixa são os limites da faixa de 80% do modelo. Atacado: média das 8 praças em reais de outubro de 2026, convertida pela relação média entre o índice real e o preço no atacado desde 2023. Média de 2026 (janeiro a outubro): índice '+nf(D.real_2026,0)+'.';$('tScen').parentNode.after(cap);
+})();
+
+function drawAll(){redraws.forEach(f=>f())}
+function seg(id,key){$(id).querySelectorAll('button').forEach(b=>b.onclick=()=>{state[key]=b.dataset.v;$(id).querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));drawAll()})}
+seg('segPeriodo','periodo');seg('segValor','valor');
+let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(drawAll,150)});
+new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',drawAll);
+</script>

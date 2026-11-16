@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudos expressos de inflação por produto</title>
+<meta name="description" content="Relatórios técnicos sobre a evolução do preço de alimentos no Brasil, com dados oficiais e código aberto.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono&display=swap">
+<style>
+:root{--bg:#f7f8f6;--ink:#10140f;--ink2:#4b514a;--muted:#7d837b;--line:#dfe2dc;--accent:#1f5c3a;--warn-bg:#fff4dc;--warn-ink:#6b4a00}
+@media (prefers-color-scheme:dark){:root{--bg:#0f110f;--ink:#eef0ec;--ink2:#c0c5bd;--muted:#8b9189;--line:#2c2f2b;--accent:#7fc79a;--warn-bg:#33290f;--warn-ink:#f2d48a;color-scheme:dark}}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:48px 16px 72px}
+.eyebrow{font:12px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font:700 clamp(30px,5vw,44px)/1.1 Archivo,Arial,sans-serif;margin:10px 0 12px;text-wrap:balance}
+p{max-width:64ch;color:var(--ink2)}
+ul.estudos{list-style:none;padding:0;margin:32px 0;border-top:2px solid var(--ink)}
+ul.estudos li{border-bottom:1px solid var(--line)}
+ul.estudos a{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;justify-content:space-between;padding:18px 0;color:inherit;text-decoration:none}
+ul.estudos a:hover b,ul.estudos a:focus-visible b{color:var(--accent);text-decoration:underline}
+ul.estudos b{font:600 22px Archivo,Arial,sans-serif}
+ul.estudos span{font-size:14px;color:var(--muted)}
+.note{background:var(--warn-bg);color:var(--warn-ink);padding:10px 14px;border-radius:6px;font-size:14px;max-width:64ch}
+a{color:var(--accent)}
+footer{margin-top:40px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<div class="eyebrow">Abastecimento e inflação de alimentos</div>
+<h1>Estudos expressos de inflação por produto</h1>
+<p>Relatórios técnicos curtos sobre a evolução do preço de alimentos no Brasil e as perspectivas para os anos seguintes, com dados oficiais e código aberto.</p>
+<ul class="estudos">
+<li><a href="tomate/"><b>Tomate: preços de 2015 a 2026 e perspectivas para 2027–2028</b><span>dados até outubro de 2026</span></a></li>
+</ul>
+<p class="note">Os estudos são elaborados com apoio de inteligência artificial, sob orientação e responsabilidade do autor, e não passam por revisão por pares. Confira os números nas fontes originais antes de usá-los.</p>
+<footer>Marcelo Cabreira Bastos · <a href="https://github.com/marcelo7bastos/estudo_express_inflacao_produto">dados e código no GitHub</a></footer>
+</main>
+</body>
+</html>
